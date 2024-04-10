@@ -9,7 +9,7 @@
 </template>
 
 <style>
-main {
+div {
   @apply text-center
 }
 </style>

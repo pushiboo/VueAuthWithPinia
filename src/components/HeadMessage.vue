@@ -16,16 +16,16 @@ defineProps({
 
 <style scoped>
 h1 {
-  font-weight: 500;
-  font-size: 2.6rem;
-  position: relative;
-  top: -10px;
+  @apply 
+    font-medium
+    text-2xl
+    relative
+    top-0
 }
-
 h3 {
-  font-size: 1.2rem;
+  @apply
+    text-xl
 }
-
 .greetings h1,
 .greetings h3 {
   @apply text-center
@@ -34,7 +34,10 @@ h3 {
 @media (min-width: 1024px) {
   .greetings h1,
   .greetings h3 {
-   @apply text-center border border-red-500
+   @apply
+    text-center 
+    border 
+    border-emerald-500
   }
 }
 </style>

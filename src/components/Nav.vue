@@ -1,4 +1,5 @@
-<script>
+<script setup>
+import { RouterLink } from 'vue-router'
 
 </script>
 
@@ -19,7 +20,10 @@ nav {
   w-full
   text-xs
   text-center
-  my-8
+ /*  my-8 */
+
+  border
+  border-teal-500
 }
 nav a.router-link-exact-active {
   @apply 

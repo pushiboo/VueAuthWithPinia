@@ -1,4 +1,4 @@
-<script>
+<script setup>
 
 </script>
 
@@ -7,8 +7,9 @@
     <h1>Login</h1>
   </div>
 </template>
+
 <style>
-main {
+div {
   @apply text-center
 }
 </style>
