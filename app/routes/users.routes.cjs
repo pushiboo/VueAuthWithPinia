@@ -1,6 +1,6 @@
+/* eslint-disable no-undef */
 // Define API Routes
 // 1) Import express and get router
-const { isAxiosError } = require('axios')
 const express = require('express')
 const router = express.Router()
 

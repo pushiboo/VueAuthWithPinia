@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dbAPI": "nodemon ./server/server.js",
+    "dbAPI": "nodemon ./server/server.cjs",
     "build": "vite build",
     "preview": "vite preview",
     "test:unit": "vitest"
