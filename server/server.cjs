@@ -8,7 +8,15 @@ const app = express()
 
 // 3) Middleware setup
 app.use(bodyParser.json())
-app.use(cors())
+
+let corsOptions = {
+  origin: "http://localhost:5173",
+  credentials: true,
+  exposedHeaders: ["set-cookie"],
+}
+
+
+app.use(cors(corsOptions))
 
 // 4) Server port 
 const port = process.env.PORT || 3002 
