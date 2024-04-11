@@ -21,6 +21,8 @@ h1 {
     text-2xl
     relative
     top-0
+    text-indigo-800
+    hover:animate-pulse 
 }
 h3 {
   @apply
