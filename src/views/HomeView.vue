@@ -23,8 +23,16 @@
 <template>
   <main>
     <h1>HOME</h1>
-    <v-btn density="comfortable" icon="$vuetify"></v-btn>
-    <v-btn @click="getUsers">Test Button</v-btn>
+    <v-btn 
+      density="comfortable"
+      size="small"
+      icon="$vuetify"></v-btn>
+    <v-btn 
+      @click="getUsers"
+      size="small"
+      color="primary"
+      density="comfortable"
+        >get User</v-btn>
 
     <br>  
     <div>

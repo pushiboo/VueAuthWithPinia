@@ -26,8 +26,8 @@ header {
 @media (min-width: 1024px) {
   header {
     @apply 
-      flex
-      pr-[var(--section-gap)]
+      flex justify-center
+      /* pr-[var(--section-gap)] */
       place-items-center
   }
 /*   header .wrapper {
