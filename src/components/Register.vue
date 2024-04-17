@@ -67,7 +67,7 @@
       ></v-text-field>
 
       <v-select
-        class="text-indigo-500"
+        class="select text-indigo-500"
         v-model="state.select"
         :error-messages="v$.select.$errors.map(e => e.$message)"
         :items="items"
@@ -85,7 +85,15 @@
         @blur="v$.checkbox.$touch"
         @change="v$.checkbox.$touch"
       ></v-checkbox>
+      <p>{{ state.checkbox }}</p>
 
+      <br>
+      <v-checkbox
+        label="WHAT?"
+        >
+
+      </v-checkbox>
+      <v-checkbox label="Checkbox"></v-checkbox>
       <v-btn
         density="comfortable"
         size="small"
@@ -124,4 +132,8 @@ form {
 .regInput {
   @apply w-auto p-4  flex justify-center
 }
+.select {
+  @apply active:bg-black
+}
+
 </style>

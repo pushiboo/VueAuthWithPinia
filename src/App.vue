@@ -2,6 +2,7 @@
 import { RouterView } from 'vue-router'
 import HeadMessage from './components/HeadMessage.vue'
 import Nav from './components/Nav.vue'
+
 </script>
 
 <template>

@@ -5,17 +5,17 @@
   const UserService = new UserServices()
   const Users = ref()
   const getUsers = async () => {
-  let results = []
-  console.log("clicked")
-  await UserService.getAll()
-    .then(res => {
-      res.data.forEach(elem => {
-        results.push({...elem})
-      });
-      Users.value = results
-      console.log("Users.value:::", Users.value)
+    let results = []
+    console.log("clicked")
+    await UserService.getAll()
+      .then(res => {
+        res.data.forEach(elem => {
+          console.log("elem", elem)
+          results.push({...elem})
+        });
+        Users.value = results
+        console.log("Users.value:::", Users.value)
     })
-
   }
 
 </script>
