@@ -2,11 +2,14 @@
   import { reactive } from 'vue'
   import { useVuelidate } from '@vuelidate/core'
   import { email, required } from '@vuelidate/validators'
+  import SvgIcon from '@jamescoyle/vue-icon';
+  import { mdiThemeLightDark } from '@mdi/js';
 
   const initialState = {
-    name: '',
+    first: '',
+    last: '',
     email: '',
-    select: null,
+    terms: null,
     checkbox: null,
   }
 
@@ -14,17 +17,11 @@
     ...initialState,
   })
 
-  const items = [
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-  ]
-
   const rules = {
-    name: { required },
+    first: { required },
+    last: { required },
     email: { required, email },
-    select: { required },
+    terms: { required },
     items: { required },
     checkbox: { required },
   }
@@ -39,101 +36,105 @@
     }
   }
 
+
+
+
+
+
+
+
+
+
 </script>
 
 <template>
-  <div class="wrapper">
-    <h1>Register</h1>
-  </div>
-  <div class="regInput">
-    <form>
+  <v-card
+    id="vcard"
+    class="mx-auto"
+    max-width="344"
+    title="User Registration"
+  >
+    <v-container>
       <v-text-field
-        v-model="state.name"
-        :counter="10"
-        :error-messages="v$.name.$errors.map(e => e.$message)"
-        label="Name"
-        required
-        @blur="v$.name.$touch"
-        @input="v$.name.$touch"
+        v-model="state.first"
+        color="primary"
+        label="First name"
+        variant="underlined"
+      ></v-text-field>
+
+      <v-text-field
+        v-model="state.last"
+        color="primary"
+        label="Last name"
+        variant="underlined"
       ></v-text-field>
 
       <v-text-field
         v-model="state.email"
-        :error-messages="v$.email.$errors.map(e => e.$message)"
-        label="E-mail"
-        required
-        @blur="v$.email.$touch"
-        @input="v$.email.$touch"
+        color="primary"
+        label="Email"
+        variant="underlined"
       ></v-text-field>
 
-      <v-select
-        class="select text-indigo-500"
-        v-model="state.select"
-        :error-messages="v$.select.$errors.map(e => e.$message)"
-        :items="items"
-        label="Item"
-        required
-        @blur="v$.select.$touch"
-        @change="v$.select.$touch"
-      ></v-select>
-
-      <v-checkbox
-        v-model="state.checkbox"
-        :error-messages="v$.checkbox.$errors.map(e => e.$message)"
-        label="Do you agree?"
-        required
-        @blur="v$.checkbox.$touch"
-        @change="v$.checkbox.$touch"
-      ></v-checkbox>
-      <p>{{ state.checkbox }}</p>
-
-      <br>
-      <v-checkbox
-        label="WHAT?"
-        >
-
-      </v-checkbox>
-      <v-checkbox label="Checkbox"></v-checkbox>
-      <v-btn
-        density="comfortable"
-        size="small"
+      <v-text-field
+        v-model="state.password"
         color="primary"
-        class="me-4"
-        @click="v$.$validate"
-      >
-        submit
-      </v-btn>
-      <v-btn @click="clear"
-        density="comfortable"
+        label="Password"
+        placeholder="Enter your password"
+        variant="underlined"
+      ></v-text-field>
+
+      <v-checkbox
+        v-model="state.terms"
         color="secondary"
-        size="small">
-        clear
+        label="I agree to site terms and conditions"
+      ></v-checkbox>
+    </v-container>
+    <v-icon icon="mdi-home" />
+    <v-divider></v-divider>
+
+    <v-card-actions>
+      <v-spacer></v-spacer>
+
+      <v-btn color="success">
+        Complete Registration
+
+        <v-icon icon="mdi-chevron-right" end></v-icon>
       </v-btn>
-    </form>
+    </v-card-actions>
+  </v-card>
+
+  <div>
+    <p>HOME</p>
+    <v-icon icon="mdi-home" />
+    <svg-icon type="mdi" :path="path"></svg-icon>
   </div>
 
-
- 
 </template>
 
+
 <style>
-div {
+#vcard {
+  @apply mx-auto max-w-80 dark
+}
+#vtext-field {
+  @apply text-[8px]
+}
+/* div {
   @apply text-center
 }
 form {
   @apply text-indigo-500
-  /*  */
-  /* w-48 items-center */
   border-indigo-900
   border
   rounded-lg
   px-6 py-3
 }
 .regInput {
-  @apply w-auto p-4  flex justify-center
+  @apply w-auto p-4 flex justify-center
 }
 .select {
   @apply active:bg-black
 }
-
+ */
 </style>

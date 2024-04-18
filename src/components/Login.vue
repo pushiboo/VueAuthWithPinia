@@ -7,8 +7,7 @@
     name: '',
     email: ''
   }
-  const visible = ref(false)
-
+  const visible = false
   const state = reactive({
     ...initialState,
   })
