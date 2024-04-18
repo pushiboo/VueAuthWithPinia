@@ -11,6 +11,7 @@
     "test:unit": "vitest"
   },
   "dependencies": {
+    "@jamescoyle/vue-icon": "^0.1.2",
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
     "@vueuse/core": "^10.9.0",
@@ -24,12 +25,14 @@
     "mongoose": "^8.3.1",
     "pinia": "^2.1.7",
     "validator": "^13.11.0",
+    "vite-plugin-vuetify": "^2.0.3",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
     "vuetify": "^3.5.15"
   },
   "devDependencies": {
     "@mdi/font": "^7.4.47",
+    "@mdi/js": "^7.4.47",
     "@vitejs/plugin-vue": "^5.0.4",
     "@vue/test-utils": "^2.4.5",
     "autoprefixer": "^10.4.19",

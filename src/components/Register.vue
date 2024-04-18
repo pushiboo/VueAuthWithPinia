@@ -1,9 +1,9 @@
 <script setup>
   import { reactive } from 'vue'
+  import { RouterLink } from 'vue-router'
   import { useVuelidate } from '@vuelidate/core'
   import { email, required } from '@vuelidate/validators'
-  import SvgIcon from '@jamescoyle/vue-icon';
-  import { mdiThemeLightDark } from '@mdi/js';
+
 
   const initialState = {
     first: '',
@@ -36,25 +36,12 @@
     }
   }
 
-
-
-
-
-
-
-
-
-
 </script>
 
 <template>
-  <v-card
-    id="vcard"
-    class="mx-auto"
-    max-width="344"
-    title="User Registration"
-  >
+  <div class="wrapper">
     <v-container>
+      <div class="text-h5">Register</div>
       <v-text-field
         v-model="state.first"
         color="primary"
@@ -84,57 +71,30 @@
         variant="underlined"
       ></v-text-field>
 
-      <v-checkbox
-        v-model="state.terms"
-        color="secondary"
-        label="I agree to site terms and conditions"
-      ></v-checkbox>
     </v-container>
-    <v-icon icon="mdi-home" />
+
     <v-divider></v-divider>
+    <div class="d-flex justify-center m-2">
+      <v-card-actions>
 
-    <v-card-actions>
-      <v-spacer></v-spacer>
-
-      <v-btn color="success">
+      <v-btn color="success" size="small" class="d-flex justify-center">
         Complete Registration
-
-        <v-icon icon="mdi-chevron-right" end></v-icon>
       </v-btn>
-    </v-card-actions>
-  </v-card>
+      </v-card-actions>
+    </div>
+    <div class="flex justify-center gap-2 text-indigo-500 mb-4">
+      <p class="text-[10px]">Or would you like to ></p>
+      <RouterLink class="text-sm" to="login">Sign In</RouterLink>
+    </div>
 
-  <div>
-    <p>HOME</p>
-    <v-icon icon="mdi-home" />
-    <svg-icon type="mdi" :path="path"></svg-icon>
   </div>
 
 </template>
 
 
 <style>
-#vcard {
-  @apply mx-auto max-w-80 dark
+.wrapper {
+  @apply mx-auto max-w-80 dark border border-indigo-900
 }
-#vtext-field {
-  @apply text-[8px]
-}
-/* div {
-  @apply text-center
-}
-form {
-  @apply text-indigo-500
-  border-indigo-900
-  border
-  rounded-lg
-  px-6 py-3
-}
-.regInput {
-  @apply w-auto p-4 flex justify-center
-}
-.select {
-  @apply active:bg-black
-}
- */
+
 </style>
