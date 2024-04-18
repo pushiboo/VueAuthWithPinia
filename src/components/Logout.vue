@@ -5,29 +5,7 @@
   import { email, minLength, required } from '@vuelidate/validators'
 
   const router = useRouter()
-  const initialState = {
-    email: '',
-    password: ''
-  }
 
-  const state = reactive({
-    ...initialState,
-  })
-
-  const rules = {
-    email: { required, email },
-    password: { required, minLength}
-  }
-
-  const v$ = useVuelidate(rules, state)
-
-  function clear () {
-    v$.value.$reset()
-
-    for (const [key, value] of Object.entries(initialState)) {
-      state[key] = value
-    }
-  }
 
 </script>
 
@@ -35,21 +13,6 @@
   <div class="wrapper">
     <v-container>
       <div class="text-h5">Logout </div>
-
-      <v-text-field
-        v-model="state.email"
-        color="primary"
-        label="Email"
-        variant="underlined"
-      ></v-text-field>
-
-      <v-text-field
-        v-model="state.password"
-        color="primary"
-        label="Password"
-        placeholder="Enter your password"
-        variant="underlined"
-      ></v-text-field>
 
     </v-container>
 
