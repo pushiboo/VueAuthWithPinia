@@ -23,21 +23,22 @@
 <template>
   <main>
     <h1>HOME</h1>
-    <v-btn 
+    <v-btn
+      @click="Users.$reset()"
       density="comfortable"
       size="small"
       icon="$vuetify"></v-btn>
+      <br>
     <v-btn 
       @click="getUsers"
       size="small"
       color="primary"
       density="comfortable"
         >get User</v-btn>
-
     <br>  
-    <div>
+    <div class="text-red-500">
       <div v-for="user in Users" :key="user.id">
-        {{ user.name }}
+        {{ user.name }} - {{  user.email }}
       </div>
     </div>
 

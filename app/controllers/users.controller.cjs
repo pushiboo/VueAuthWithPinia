@@ -12,15 +12,11 @@ exports.create = (req, res) => {
   // Create a User
   const user = new Users({
     username: req.body.username,
-    forename: req.body.forename,
-    surname: req.body.surname,
+    firstname: req.body.forename,
+    lastname: req.body.surname,
     email: req.body.email,
     password: req.body.password,
     active: req.body.active,
-    "ad-account": req.body['ad-account'],
-    role: req.body.role,
-    "function-role": req.body['function-role'],
-    "api-token": req.body['api-token'],
     additional: req.body.additional,
     created: req.body.created,
     lastActiveAt: req.body.lastActiveAt

@@ -1,11 +1,7 @@
 <script setup>
-  import { reactive } from 'vue'
-  import { RouterLink, useRouter } from 'vue-router'
-  import { useVuelidate } from '@vuelidate/core'
-  import { email, minLength, required } from '@vuelidate/validators'
+  import { useRouter } from 'vue-router'
 
   const router = useRouter()
-
 
 </script>
 
@@ -32,7 +28,7 @@
 
 <style>
 .wrapper {
-  @apply mx-auto max-w-80 dark border border-indigo-900
+  @apply mx-auto max-w-96 dark border border-indigo-900
 }
 
 </style>
