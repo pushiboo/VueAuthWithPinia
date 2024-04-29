@@ -1,34 +1,57 @@
-<script setup>
+<script>
   import { reactive } from 'vue'
   import { useRouter } from 'vue-router'
   import { useVuelidate } from '@vuelidate/core'
   import { email, alpha, required, minLength, between, sameAs } from '@vuelidate/validators'
+import { computed } from 'vue'
+ 
+  export default {
+   setup ()  {
+    const user = reactive({
+      password: '',
+      repeatPassword: '',
+      show: true
+    })
+    const rules = {
+      password: { required, minLength: minLength(5) },
+      /* repeatPassword: { sameAsPassword: sameAs('password')} */
+      repeatPassword: { sameAsPassword: sameAs(computed(() => user.password))}
 
-  const router = useRouter()
-  const user = reactive({
+    }
+
+    const v$ = useVuelidate(rules, user)
+
+    const handleSubmit = (() => {
+      if(user.password){
+        console.log("handleSubmit", )
+      }
+
+    })
+    function repPassword (value) {
+      user.repeatPassword = value
+    }
+    function setPassword (value) {
+      user.password = value
+    }
+
+    return { user, v$, handleSubmit, repPassword, setPassword}
+  }
+}
+  /* const router = useRouter() */
+/*   const user = reactive({
     password: '',
     repeatPassword: '',
     show: true
   })
-/*   const props = defineProps({
-    password: user.password
-  }) */
-  const rules = {
+ */
+/*   const { pass } = toRefs(props);
+  const  rules = {
     password: { required, minLength: minLength(5) },
-    repeatPassword: { sameAsPassword: sameAs(user.password)}
+    repeatPassword: { sameAsPassword: sameAs(props.pass)}
   }
-  const v$ = useVuelidate(rules, user/* , { $lazy: true } */)
+  const v$ = useVuelidate(rules, user) */
 
-  function setPassword (value) {
-     user.password = value
-  }
-  function repPassword (value) {
-     user.repeatPassword = value
-  }
-  const handleSubmit = (() => {
-    v$.value = useVuelidate(rules, user/* , { $lazy: true } */)
-    console.log("v$:", v$)
-  })
+
 
 </script>
 
@@ -42,7 +65,7 @@
             v-model.trim="user.password"
             @input="v$.password.$touch"
             @blur="v$.password.$touch"
-            @change="setPassword(v$.password.$model)"
+            
             :error-messages="v$.password.$errors.map(e => e.$message)"
             :append-icon="user.show ? 'mdi-eye' : 'mdi-eye-off'"
             :type="user.show ? 'text' : 'password'"
@@ -54,12 +77,15 @@
             variant="underlined"
             @click:append="user.show = !user.show"
           ></v-text-field>
+          <!-- 
+            @change="repPassword(v$.repeatPassword.$model)"
+           -->
           <v-text-field
             v-model.trim="user.repeatPassword" 
             @input="v$.repeatPassword.$touch"
             @blur="v$.repeatPassword.$touch"
-            @change="repPassword(v$.repeatPassword.$model)"
-            :error-messages="v$.repeatPassword.sameAsPassword.$errors"
+
+            :error-messages="v$.repeatPassword.$errors.map(e => e.$message)"
             :append-icon="user.show ? 'mdi-eye' : 'mdi-eye-off'"
             :type="user.show ? 'text' : 'password'"
             hint="At least 5 characters"
@@ -70,22 +96,40 @@
             variant="underlined"
             @click:append="user.show = !user.show"
           ></v-text-field>
-          <div v-if="!v$.repeatPassword.sameAsPassword.$errors">
-<!--             <br>
-            $message:
-            {{v$.repeatPassword.sameAsPassword.$message}} -->
+          <div v-if="v$.repeatPassword.$error">
             <br>
+            user.password:
+            {{user.password}}
+            <br>
+            user.repeatPassword:
+            {{user.repeatPassword}}
+            <br>
+            <v-divider></v-divider>
+            <br>
+            <br>
+            v$.repeatPassword.$invalid:
+            {{v$.repeatPassword.$invalid}}
+            <br>
+            <v-divider></v-divider>
+            <!-- {{v$.repeatPassword}} -->
+            {{v$.repeatPassword.$error}}
+<!--             <br>
             $response:
-            {{v$.repeatPassword.sameAsPassword.$response}}
+            {{v$.repeatPassword.$response}}
             <br>
             equalTo:
-            {{v$.repeatPassword.sameAsPassword.$params.equalTo}}
-            <br>
-            otherName:
-            {{v$.repeatPassword.sameAsPassword.$params.otherName}}
-            <br>
-            user:
+            {{v$.repeatPassword.sameAsPassword.$params.equalTo}} -->
+<!--             otherName:
+            {{v$.repeatPassword.sameAsPassword.$params.otherName}} -->
+<!--             <br>
+            params:
+            {{v$.repeatPassword.sameAsPassword.$params}}
+            <br> -->
+<!--             user:
             {{user}}
+            <br>
+            v$:
+            {{v$}} -->
           </div>
         </v-responsive>
       </v-form>
