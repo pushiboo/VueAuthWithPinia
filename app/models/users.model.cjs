@@ -5,19 +5,17 @@ const bcrypt = require('bcrypt')
 // Create your Schema for your User, and how it should look like and which properties it should have
 module.exports = mongoose => {
   const userSchema = new mongoose.Schema({
-    username: {
+    name: {
       type: String,
       required: [true, 'Please enter an username'],
       unique: [true, 'This username is already in use, please try again']
     },
-    firstname: {
-      type: String,
-      /* required: [true, 'Please enter your first name'] */
+/*     firstname: {
+      type: String
     },
     lastname: {
-      type: String,
-      /* required: [true, 'Please enter your surname'] */
-    },
+      type: String
+    }, */
     email: {
       type: String,
       required: [true, 'Please enter an email'],

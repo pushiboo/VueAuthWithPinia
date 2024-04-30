@@ -4,20 +4,18 @@ const Users = db.users
 // Create and Save a new User
 exports.create = (req, res) => {
   // Validate request
-  if(!req.body.username) {
+  if(!req.body.email) {
     res.status(407).send({ message: "user.controller.create() | ERROR: Content can not be empty!"})
+    console.log("res", res.body, "req", req.body)
     return
   }
 
   // Create a User
   const user = new Users({
-    username: req.body.username,
-    firstname: req.body.forename,
-    lastname: req.body.surname,
+    name: req.body.name,
+    age: req.body.age,
     email: req.body.email,
     password: req.body.password,
-    active: req.body.active,
-    additional: req.body.additional,
     created: req.body.created,
     lastActiveAt: req.body.lastActiveAt
   })
