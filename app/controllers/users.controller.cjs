@@ -55,12 +55,12 @@ exports.findAll = (req, res) => {
 
 // Find a single Users with an id
 exports.findOne = (req, res) => {
-  const id = req.params.id
+  const email = req.params.email
 
-  Users.findById(id)
+  Users.findById(email)
     .then(data => {
       if(!data)
-        res.status(404).send({ message: "user.controller.findOne() | INFO: Users with id:" + id + "not found!"})
+        res.status(404).send({ message: "user.controller.findOne() | INFO: Users with id:" + email + "not found!"})
       else res.send(data)
     })
     .catch(err => {

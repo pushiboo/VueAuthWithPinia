@@ -3,7 +3,10 @@
   import { RouterLink } from 'vue-router'
   import { useVuelidate } from '@vuelidate/core'
   import { email, minLength, required } from '@vuelidate/validators'
+  import UserServices from '@/services/users.service'
+  import AuthServices from '@/services/auth.service'
 
+  const UserService = new UserServices()
   const user = ref({
     email: '',
     password: '',
@@ -22,35 +25,38 @@
     }
   }
 
+  const handleClick = () => {
+    console.log("handleClick, user", user.value)
+    const getUser = UserService.findByEmail(user.value.email)
+    console.log("getUser:", user.value)
+  }
 
-  function setEmail (value) {
-     user.value.email = value
+  const handleSubmit = async () => {
+
+    let data = user.value
+
+
   }
-  function setPassword (value) {
-     user.value.password = value
-  }
+
 </script>
 
 <template>
   <div class="wrapper">
     <v-container>
       <div class="text-h5">Login</div>
-
-      <v-text-field
-          v-model="user.email"
-          @change="setEmail(user.email)"
-          @input="v$.email.$touch"
-          :error-messages="v$.email.$errors.map(e => e.$message)"
-          color="primary"
-          label="Email"
-          placeholder="Please enter your email"
-          variant="underlined"
-          clearable
+      <v-form @submit.prevent="handleSubmit">
+        <v-text-field
+            v-model="user.email"
+            @input="v$.email.$touch"
+            :error-messages="v$.email.$errors.map(e => e.$message)"
+            color="primary"
+            label="Email"
+            placeholder="Please enter your email"
+            variant="underlined"
+            clearable
         ></v-text-field>
-
         <v-text-field
             v-model="user.password"
-            @change="setPassword(user.password)"
             @input="v$.password.$touch"
             :error-messages="v$.password.$errors.map(e => e.$message)"
             :append-icon="user.show ? 'mdi-eye' : 'mdi-eye-off'"
@@ -62,26 +68,25 @@
             autocomplete="off"
             variant="underlined"
             @click:append="user.show = !user.show"
-          ></v-text-field>
-
+        ></v-text-field>
+      </v-form>
+      <!-- 
+          @change="setEmail(user.email)"  
+          @change="setPassword(user.password)"
+      -->
     </v-container>
 
     <v-divider></v-divider>
     <div class="d-flex justify-center m-2">
       <v-card-actions>
-
-      <v-btn color="success" size="small" class="d-flex justify-center">
-        Login
-      </v-btn>
+        <v-btn @click="handleClick" color="success" size="small" class="d-flex justify-center">Login</v-btn>
       </v-card-actions>
     </div>
     <div class="flex justify-center gap-2 text-indigo-500 mb-4">
       <p class="text-sm">Please register here:</p>
       <RouterLink class="text-sm" to="register">Register</RouterLink>
     </div>
-
   </div>
-
 </template>
 
 

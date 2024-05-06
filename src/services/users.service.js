@@ -5,7 +5,7 @@ class UserServices {
     return http.get('/users')
   }
   get(id) {
-    return http.get(`/users/${id}`)
+    return http.get(`/users/${email}`)
   }
   create(data) {
     return http.post("/users", data)
@@ -18,6 +18,9 @@ class UserServices {
   }
   findByUsername(username) {
     return http.get(`/users?username=${username}`)
+  }
+  findByEmail(email) {
+    return http.get(`/users?email=${email}`)
   }
 }
 

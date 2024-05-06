@@ -28,4 +28,7 @@ header {
       place-items-center
   }
 }
+/* .wrapper {
+  @apply w-96
+} */
 </style>

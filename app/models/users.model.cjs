@@ -10,12 +10,6 @@ module.exports = mongoose => {
       required: [true, 'Please enter an username'],
       unique: [true, 'This username is already in use, please try again']
     },
-/*     firstname: {
-      type: String
-    },
-    lastname: {
-      type: String
-    }, */
     email: {
       type: String,
       required: [true, 'Please enter an email'],

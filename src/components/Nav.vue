@@ -53,6 +53,7 @@ nav {
   border
   border-teal-500
   p-2
+  
 }
 nav a.router-link-exact-active {
   @apply 
@@ -73,4 +74,4 @@ nav a:first-of-type {
   @apply 
     border-none
 }
-</style>../stores/nav.store.js/index.js
+</style>
