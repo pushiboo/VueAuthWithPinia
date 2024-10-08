@@ -22,9 +22,6 @@ module.exports = mongoose => {
       required: [ true, 'Please enter an password' ],
       minlength: [ 6, 'Minimum password length is 6 charaters' ]
     },
-    active: Boolean,
-    role: String,
-    "api-token": String,
     created: Date,
     lastActiveAt: Date,
     lastUpdated: Date,
@@ -47,13 +44,14 @@ module.exports = mongoose => {
     next()
   })
   // static method to login user
-  userSchema.statics.login = async function( username, password ) {
-    /* console.log("users.model.js | INFO: Checking validate login date") */
-    const user = await this.findOne({ username })
-    
+  userSchema.statics.login = async function( email, password ) {
+    console.log("users.model.js | INFO: Checking validate login date", email, password)
+    const user = await this.findOne({ email })
+    // console.log("users.model.js UserSchema.login | SUCCESS: User data matched successfully")
     if (user) {
-      /* console.log("users.model.js UserSchema.login | SUCCESS: User data matched successfully") */
+      console.log("users.model.js UserSchema.login | user", user)
       const auth = await bcrypt.compare( password, user.password)
+      console.log("users.model.js UserSchema.login | SUCCESS: User data matched successfully")
       if (auth) {
         return user
       }

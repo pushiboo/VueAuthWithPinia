@@ -4,7 +4,7 @@ class UserServices {
   getAll() {
     return http.get('/users')
   }
-  get(id) {
+  get(email) {
     return http.get(`/users/${email}`)
   }
   create(data) {

@@ -3,15 +3,32 @@
   import { RouterLink } from 'vue-router'
   import { useVuelidate } from '@vuelidate/core'
   import { email, minLength, required } from '@vuelidate/validators'
-  import UserServices from '@/services/users.service'
+  // import UserServices from '@/services/users.service'
   import AuthServices from '@/services/auth.service'
+  import { watchEffect } from 'vue'
 
-  const UserService = new UserServices()
+  // const UserService = new UserServices()
   const user = ref({
     email: '',
     password: '',
     show: false
   })
+
+  const AuthService = new AuthServices()
+
+  const storageLoginCache = localStorage.getItem('LoginCache')
+  if (storageLoginCache) {
+    user.value.email = storageLoginCache
+    console.log("storageLoginCache",storageLoginCache);
+  }
+  watchEffect(() => {
+    // user.email.value
+    console.log("user.email.value:", typeof(user.value.email),user.value.email);
+    localStorage.setItem('LoginCache', user.value.email)
+
+  })
+
+  
   const rules = ref({
     email: { required, email },
     password: { required, minLength: minLength(5)}
@@ -25,18 +42,68 @@
     }
   }
 
-  const handleClick = () => {
+  const handleClick = async () => {
+    let data = {
+      email: user.value.email,
+      password: user.value.password
+    }
+
     console.log("handleClick, user", user.value)
-    const getUser = UserService.findByEmail(user.value.email)
-    console.log("getUser:", user.value)
+   /*  const getUser = await UserService.findByEmail(user.value.email)
+    console.log("getUser:", getUser.value) */
+    /* const authLogin = await  */
+    await AuthService
+      .login_post(data)
+      .then(res =>{
+        const data = res.data
+        console.log("then data", data)
+      })
+      .catch(err => {
+        console.log('LoginView.vue | ERROR: ', err.message)
+      })
+    /* console.log("getUser:", getUser) */
+    /* console.log("authLogin:", authLogin) */
   }
 
-  const handleSubmit = async () => {
 
-    let data = user.value
+  // const handleSubmit = async () => {
+  //   let data = {
+  //     username: user.value.username,
+  //     password: user.value.password
+  //   }
 
+  //   await userAuth
+  //     .login_post(data)
+  //     .then((res) => {
+  //       const data = res.data
+  //       userStore.receiveUser(data)
+  //       authStore.receiveAuth(data)
+  //       localStorage.setItem(
+  //         'andreasplichta',
+  //         JSON.stringify({ name: name, state: true, date: currDate })
+  //       )
+  //       error.value = null
+  //       router.push({ name: 'home' })
+  //     })
+  //     .catch((err) => {
+  //       console.log('login_post.err: ', err)
+  //       error.value = err.response.data.errors
+  //       console.log(`LoginView.vue | ERROR: occured during create user, see error message: ${err}`)
+  //       console.log('LoginView.vue | ERROR: ', error.value)
+  //       if (error.value.email) {
+  //         error.value = error.value.email
+  //         console.log('username')
+  //       } else if (error.value.password) {
+  //         error.value = error.value.password
+  //         console.log('password')
+  //       } else {
+  //         console.log('default', error.value)
+  //         error.value = error.value = 'some other error occured here'
+  //       }
+  //     })
 
-  }
+  //   return { user, handleSubmit, error }
+  // }
 
 </script>
 
@@ -44,7 +111,8 @@
   <div class="wrapper">
     <v-container>
       <div class="text-h5">Login</div>
-      <v-form @submit.prevent="handleSubmit">
+      <!-- <v-form @submit.prevent="handleSubmit"> -->
+      <v-form >
         <v-text-field
             v-model="user.email"
             @input="v$.email.$touch"
@@ -53,7 +121,7 @@
             label="Email"
             placeholder="Please enter your email"
             variant="underlined"
-            clearable
+            
         ></v-text-field>
         <v-text-field
             v-model="user.password"
@@ -80,6 +148,7 @@
     <div class="d-flex justify-center m-2">
       <v-card-actions>
         <v-btn @click="handleClick" color="success" size="small" class="d-flex justify-center">Login</v-btn>
+        <!-- <v-btn @click="handleSubmit" color="success" size="small" class="d-flex justify-center">Login</v-btn> -->
       </v-card-actions>
     </div>
     <div class="flex justify-center gap-2 text-indigo-500 mb-4">

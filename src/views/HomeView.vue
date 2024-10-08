@@ -4,6 +4,7 @@
 
   const UserService = new UserServices()
   const Users = ref()
+
   const getUsers = async () => {
     let results = []
     console.log("clicked")
@@ -16,6 +17,12 @@
         Users.value = results
         console.log("Users.value:::", Users.value)
     })
+  }
+
+  const getPolicies = () => {
+    console.log("clicked")
+    console.log('file:', file)
+    /* console.log("getPolicy", getPolicy) */
   }
 
 </script>
@@ -40,6 +47,16 @@
       <div v-for="user in Users" :key="user.id">
         {{ user.name }} - {{  user.email }}
       </div>
+    </div>
+    <br>
+    <div>
+      <v-btn 
+      @click="getPolicies"
+      size="small"
+      color="secondary"
+      density="comfortable"
+        >get Policies</v-btn>
+    <br>  
     </div>
 
   </main>

@@ -30,6 +30,7 @@ db.mongoose
   })
 
 require("../app/routes/users.routes.cjs")(app)
+require("../app/routes/auth.routes.cjs")(app)
 /* var httpServer = http.createServer(app); */
 /* var httpServer = http.createServer(app); */
 

@@ -55,12 +55,12 @@ exports.findAll = (req, res) => {
 
 // Find a single Users with an id
 exports.findOne = (req, res) => {
-  const email = req.params.email
+  const id = req.params.id
 
-  Users.findById(email)
+  Users.findById(id)
     .then(data => {
       if(!data)
-        res.status(404).send({ message: "user.controller.findOne() | INFO: Users with id:" + email + "not found!"})
+        res.status(404).send({ message: "user.controller.findOne() | INFO: Users with id:" + id + "not found!"})
       else res.send(data)
     })
     .catch(err => {
@@ -70,6 +70,24 @@ exports.findOne = (req, res) => {
       console.log("user.controller.findOne() | ERROR: err.message:", err)
     })
 }
+// Find a single Users with an email
+exports.findEmail = (req, res) => {
+  const email = req.params.email
+
+  Users.findOne({email})
+    .then(data => {
+      if(!data)
+        res.status(404).send({ message: "user.controller.findOne() | INFO: Users with email:" + email + "not found!"})
+      else res.send(data)
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .send({ message: "user.controller.findOne() | ERROR: retrieving Users with email=" + email })
+      console.log("user.controller.findOne() | ERROR: err.message:", err)
+    })
+}
+
 
 // Update a Users by the id in the request
 exports.update = (req, res) => {

@@ -1,20 +1,13 @@
 /* eslint-disable no-undef */
-const db = require("../models/")
+const db = require("../models/index.cjs")
 const Users = db.users
 const jwt = require('jsonwebtoken'); 
 const fs = require('fs');
 const path = require('path');
-
-
 const maxAge = 3 * 60 * 60;
-/* const maxAge = 3 * 24 * 60 * 60; */
 const privateKeyPath = path.join(__dirname, '..' , 'config/', 'private.key')
 const privateKey = fs.readFileSync( privateKeyPath, { encoding: 'utf8', flag: 'r' });
 const cookieName = 'andreasplichta'
-/* const sideNavStore = useSideNavStore()
-
-
-console.log("Test sideNavStore:", sideNavStore.getState ) */
 
 
 // handle errors
@@ -73,43 +66,8 @@ const createToken = (id) => {
 
   return token
 }
-module.exports.signin_post = async (req, res) => {
-  
-  const token = createToken(req.body.email)
-  
-  const user = new Users({
-    username: req.body.username,
-    forename: req.body.forename,
-    surname: req.body.surname,
-    email: req.body.email,
-    password: req.body.password,
-    active: req.body.active,
-    "ad-account": req.body['ad-account'],
-    role: req.body.role,
-    "function-role": req.body['function-role'],
-    "api-token": token,
-    additional: req.body.additional,
-    created: req.body.created,
-    lastActiveAt: req.body.lastActiveAt
-  })
 
-  user
-    .save(user)
-    .then(data => {
-      /* Create a secure version of the token */
-      const token = createToken(data._id)
-
-      res.cookie('andreasplichta', token, { httpOnly: true, maxAge: maxAge * 1000 }) 
-      res.status(200).json({ user: user._id, username: user.username, role: user.role, token })
-      console.log("auth.controller.signin_post() | SUCCESS: User signed in successfully: data",data)
-      res.end()
-    })
-    .catch(err => {
-      const errors = handleErrors(err)
-      res.status(500).json({ errors })
-      console.log("auth.controller.signin_post() | ERROR: During create cookie process", errors)
-    })
-}
+// callback functions
 module.exports.login_get = (req, res, next) => {
   if(!req.rawHeaders.includes("Cookie")) {
     console.log("auth.controller.login_get() | INFO: No cookies in rawHeaders!")
@@ -152,7 +110,7 @@ module.exports.login_get = (req, res, next) => {
   }
 }
 module.exports.login_post = async (req, res) => {
-  if(!req.body.username) {
+  if(!req.body.email) {
     res.status(407).send({ message: "auth.controller.login_post() | ERROR: Content can not be empty!"})
     res.end()
   }
@@ -179,6 +137,43 @@ module.exports.login_post = async (req, res) => {
     
     res.end()
   }
+}
+module.exports.signin_post = async (req, res) => {
+  
+  const token = createToken(req.body.email)
+  
+  const user = new Users({
+    username: req.body.username,
+    forename: req.body.forename,
+    surname: req.body.surname,
+    email: req.body.email,
+    password: req.body.password,
+    active: req.body.active,
+    "ad-account": req.body['ad-account'],
+    role: req.body.role,
+    "function-role": req.body['function-role'],
+    "api-token": token,
+    additional: req.body.additional,
+    created: req.body.created,
+    lastActiveAt: req.body.lastActiveAt
+  })
+
+  user
+    .save(user)
+    .then(data => {
+      /* Create a secure version of the token */
+      const token = createToken(data._id)
+
+      res.cookie('andreasplichta', token, { httpOnly: true, maxAge: maxAge * 1000 }) 
+      res.status(200).json({ user: user._id, username: user.username, role: user.role, token })
+      console.log("auth.controller.signin_post() | SUCCESS: User signed in successfully: data",data)
+      res.end()
+    })
+    .catch(err => {
+      const errors = handleErrors(err)
+      res.status(500).json({ errors })
+      console.log("auth.controller.signin_post() | ERROR: During create cookie process", errors)
+    })
 }
 module.exports.logout_delete = (req, res) => {
   if(!req.rawHeaders.includes("Cookie")) {

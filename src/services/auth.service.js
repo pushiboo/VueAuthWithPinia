@@ -1,18 +1,19 @@
-import http from '../http-axios'
+import http from '../http-axios.js'
 
-class UserAuthServices {
+class AuthServices {
   login_get() {
-    return http.get('/auth', { withCredentials: true })
+    return http.get('/auth'/* , { withCredentials: true } */)
   }
   login_post(data) {
-    return http.post('/auth/login', data, { withCredentials: true })
+    return http.post('/auth', data)
+    // return http.post('/auth/login', data, { withCredentials: true }) 
   }
   signin_post(data) {
-    return http.post('/auth ', data, { withCredentials: true })
+    return http.post('/auth/signin ', data/* , { withCredentials: true } */)
   }
   logout_delete() {
-    return http.delete('/auth/logout', { withCredentials: true })
+    return http.delete('/auth/logout'/* , { withCredentials: true } */)
   }
 }
 
-export default UserAuthServices
+export default AuthServices

@@ -4,6 +4,8 @@
   import { useVuelidate } from '@vuelidate/core'
   import { email, alpha, required, minLength, between, sameAs } from '@vuelidate/validators'
   import UserServices from '@/services/users.service'
+  import {useFormStore} from '@/stores/form.store'
+  import { watchEffect } from 'vue'
 
   const router = useRouter()
   const UserService = new UserServices()
@@ -16,6 +18,57 @@
     repeatPassword: '',
     show: false
   })
+
+  const getUser = useFormStore()
+
+  const storageRegisterCache = localStorage.getItem('RegisterCache')
+  console.log("storageRegisterCache",storageRegisterCache);
+  if (storageRegisterCache) {
+    user.value = JSON.parse(storageRegisterCache)
+    // console.log("storageRegisterCache",storageRegisterCache);
+  }
+  watchEffect(() => {
+    // user.email.value
+    // console.log("user.value:", typeof(user.value),user.value);
+    localStorage.setItem('RegisterCache', JSON.stringify(user.value))
+    // window.localStorage.setItem('RegisterCache', user.value)
+  })
+  // getUser.$patch({user: { name: user.value.name, age: user.value.age, email: user.value.email }})
+  // getUser.$subscribe(() => {
+  //     getUser.$patch({ user: { name: user.value.name, age: user.value.age, email: user.value.email }})
+  //     localStorage.setItem("RegisterForm", JSON.stringify(user))
+  //   },{
+  //     detached: true
+  //   })
+
+  // watch(
+  //   (getUser) => {
+  //     console.log("watching ", getUser);
+      
+  //   },
+  //   { deep: true }
+  // )
+  // watchEffect((user.value) => {
+
+  //   console.log("user", user.value)
+  // })
+  // console.log("getUser", getUser.user)
+  console.log("user", user.value)
+
+
+  // if (localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+  //   document.querySelector('html').classList.add('dark');
+  //   localStorage.setItem('dark-mode', true)
+  //   darkMode.$patch({ darkMode: true })
+  //   console.log("DARK MODE was added")
+  //   console.log("See Store value:", darkMode.getDarkMode)
+  // } else {
+  //   document.querySelector('html').classList.remove('dark');
+  //   localStorage.setItem('dark-mode', false)
+  //   /* darkMode.$patch({ darkMode: false }) */
+  //   console.log("DARK MODE was removed")
+  //   console.log("See Store value:", darkMode.getDarkMode)
+  // }
   const rules = {
     name: { required, alpha, minLength: minLength(3) },
     age: { required, between: between(20, 30) },
@@ -64,7 +117,7 @@
             label="Name"
             placeholder="Please enter your name"
             variant="underlined"
-            clearable
+
           ></v-text-field>
           <v-text-field
             v-model="user.age"
@@ -76,7 +129,7 @@
             label="Age"
             placeholder="Please chose between 20 - 30"
             variant="underlined"
-            clearable
+
           ></v-text-field>
           <v-text-field
             v-model="user.email"
