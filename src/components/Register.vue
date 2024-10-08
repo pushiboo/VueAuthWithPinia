@@ -31,6 +31,8 @@
     // user.email.value
     // console.log("user.value:", typeof(user.value),user.value);
     localStorage.setItem('RegisterCache', JSON.stringify(user.value))
+    // localStorage.setItem(('RegisterCache', user.value.password = '', user.value.repeatPassword = '')
+    // localStorage.removeItem('RegisterCache', )
     // window.localStorage.setItem('RegisterCache', user.value)
   })
   // getUser.$patch({user: { name: user.value.name, age: user.value.age, email: user.value.email }})
