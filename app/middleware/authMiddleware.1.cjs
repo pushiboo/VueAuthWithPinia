@@ -1,8 +1,6 @@
 /* eslint-disable no-undef */
 const jwt = require('jsonwebtoken')
 const User = require('../models/users.model.cjs')
-// import * as jwt from 'jsonwebtoken'
-// import * as User from '../models/users.model.cjs'
 
 // check if the user token is valid
 const requireAuth = ( req, res, next ) => {
@@ -48,5 +46,5 @@ const checkUser = ( req, res, next ) => {
   }
 }
 
-// export { requireAuth, checkUser }
+/* export { requireAuth, checkUser } */
 module.exports = { requireAuth, checkUser }

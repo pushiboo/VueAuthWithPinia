@@ -45,11 +45,11 @@ module.exports = mongoose => {
   })
   // static method to login user
   userSchema.statics.login = async function( email, password ) {
-    console.log("users.model.js | INFO: Checking validate login date", email, password)
-    const user = await this.findOne({ email })
+    console.log("users.model.js | INFO: Checking validate login date:", email, password)
+    const user = await this.findOne({email})
     // console.log("users.model.js UserSchema.login | SUCCESS: User data matched successfully")
     if (user) {
-      console.log("users.model.js UserSchema.login | user", user)
+      console.log("users.model.js UserSchema.login | user:", user)
       const auth = await bcrypt.compare( password, user.password)
       console.log("users.model.js UserSchema.login | SUCCESS: User data matched successfully")
       if (auth) {
@@ -59,8 +59,6 @@ module.exports = mongoose => {
     }
     throw Error('users.model.js UserSchema.login | ERROR: Incorrect email')
   }
-
-
 
   // The the 'user# is important, because mongoose makes under the hood automatically a plural out of the user to users.
   // This mean if our document in the db is called cars then we have to use 'car' the singular

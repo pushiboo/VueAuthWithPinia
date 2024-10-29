@@ -1,0 +1,23 @@
+Vue 3, Vue Router 4 Navigation Guards and Pinia store
+🌐
+stackoverflow.com
+› questions › 71697444 › vue-3-vue-router-4-navigation-guards-and-pinia-store
+So I just met this problem and fixed it thanks to this solution
+
+As it says, the router gets instantiated before App.vue is fully mounted so check the token in beforeEach instead, like:
+
+router.beforeEach(async (to, from, next): Promise<void> => {
+  const user = useUser();
+  await user.get();
+
+  console.log(user) // user is defined
+
+  if (to.meta.requiresAuth && !user.isLoggedIn) next({ name: "home" }); // this will work
+
+By the way instead of having an action setAuth you could just use your getter isAuth checking if user is not null, like:
+
+isAuth: (state) => state.user !== null
+
+Also it's not recommended to store a JWT in the local storage as if you're site is exposed to XSS attacks the token can be stolen. You should at least store it in an HttpOnly cookie (meaning it's not accessible from JavaScript), it's super easy to do with Express.
+
+Antwort von user11720384 von Stack Overflow

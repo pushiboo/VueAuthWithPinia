@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 let corsOptions = {
   origin: "http://localhost:5173",
-/*   credentials: true, */
+  credentials: true, 
   exposedHeaders: ["set-cookie"],
 }
 

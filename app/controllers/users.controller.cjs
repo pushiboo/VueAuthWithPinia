@@ -1,5 +1,8 @@
 const db = require("../models/index.cjs")
+const path = require('node:path');
 const Users = db.users
+const filename = path.basename(__filename)
+console.log("filename", filename);
 
 // Create and Save a new User
 exports.create = (req, res) => {
@@ -56,8 +59,11 @@ exports.findAll = (req, res) => {
 // Find a single Users with an id
 exports.findOne = (req, res) => {
   const id = req.params.id
+  console.log("findOne id:", id);
+  
 
-  Users.findById(id)
+  // Users.findById(id)
+  Users.find({email: id})
     .then(data => {
       if(!data)
         res.status(404).send({ message: "user.controller.findOne() | INFO: Users with id:" + id + "not found!"})
@@ -70,24 +76,37 @@ exports.findOne = (req, res) => {
       console.log("user.controller.findOne() | ERROR: err.message:", err)
     })
 }
+
 // Find a single Users with an email
 exports.findEmail = (req, res) => {
   const email = req.params.email
+  console.log("req.params", req.params.email);
 
-  Users.findOne({email})
-    .then(data => {
-      if(!data)
-        res.status(404).send({ message: "user.controller.findOne() | INFO: Users with email:" + email + "not found!"})
-      else res.send(data)
-    })
-    .catch(err => {
-      res
-        .status(500)
-        .send({ message: "user.controller.findOne() | ERROR: retrieving Users with email=" + email })
-      console.log("user.controller.findOne() | ERROR: err.message:", err)
-    })
+  // Users.find({email: email})
+  //   .then(data => {
+  //     res.send(data)
+  //   })
+  //   .catch(err => {
+  //     res.status(500).send({
+  //       message: 
+  //         err.message || "user.controller.findAllPublished() | Error: occured while retrieving users"
+  //     })
+  //   })
+  // Users.findByEmail()
+  //   .then(data => {
+  //     if(!data)
+  //       res.status(404).send({ message: "user.controller.findOne() | INFO: Users with email:" + email + "not found!"})
+  //     else 
+  //       console.log("data___",data);
+  //       res.send(data)
+  //   })
+  //   .catch(err => {
+  //     res
+  //       .status(500)
+  //       .send({ message: "user.controller.findOne() | ERROR: retrieving Users with email=" + email })
+  //     console.log("user.controller.findOne() | ERROR: err.message:", err)
+  //   })
 }
-
 
 // Update a Users by the id in the request
 exports.update = (req, res) => {

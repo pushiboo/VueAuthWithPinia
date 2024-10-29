@@ -7,7 +7,7 @@ module.exports = app => {
   // Get and validate User
   router.get('/', auth.login_get);
   // Login User 
-  router.post('/', auth.login_post)
+  router.post('/login', auth.login_post)
   // Signin User 
   router.post('/signin', auth.signin_post);
   // Logout User and delete cookies

@@ -4,9 +4,13 @@ class UserServices {
   getAll() {
     return http.get('/users')
   }
-  get(email) {
-    return http.get(`/users/${email}`)
+  findByEmail(email) {
+    return http.get('/users/email')
+    // return http.get(`/users/${email}`)
   }
+  // get(email) {
+  //   return http.get(`/users/${email}`)
+  // }
   create(data) {
     return http.post("/users", data)
   }
@@ -16,12 +20,13 @@ class UserServices {
   delete(id) {
     return http.delete(`/users/${id}`)
   }
-  findByUsername(username) {
-    return http.get(`/users?username=${username}`)
-  }
-  findByEmail(email) {
-    return http.get(`/users?email=${email}`)
-  }
+  // findByUsername(username) {
+  //   return http.get(`/users/search?username=${username}`)
+  // }
+  // findById(id) {
+  //   return http.get(`/users/${id}`)
+  // }
+
 }
 
 export default UserServices

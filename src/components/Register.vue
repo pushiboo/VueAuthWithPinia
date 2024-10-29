@@ -1,14 +1,20 @@
 <script setup>
   import { ref, onUpdated, computed } from 'vue'
+
   import { useRouter } from 'vue-router'
   import { useVuelidate } from '@vuelidate/core'
   import { email, alpha, required, minLength, between, sameAs } from '@vuelidate/validators'
   import UserServices from '@/services/users.service'
-  import {useFormStore} from '@/stores/form.store'
+  import AuthServices from '@/services/auth.service'
+  import { useAuthStore } from '@/stores/auth.store'
+  // import {useFormStore} from '@/stores/form.store'
   import { watchEffect } from 'vue'
 
   const router = useRouter()
   const UserService = new UserServices()
+  const AuthService = new AuthServices()
+  const authStore = useAuthStore()
+  const { registerUser } = authStore
   const testPasswd = ref('')
   const user = ref({
     name: '',
@@ -19,58 +25,21 @@
     show: false
   })
 
-  const getUser = useFormStore()
-
+  // const getUser = useFormStore()
   const storageRegisterCache = localStorage.getItem('RegisterCache')
-  console.log("storageRegisterCache",storageRegisterCache);
+  console.log("storageRegisterCache",storageRegisterCache)
+
   if (storageRegisterCache) {
     user.value = JSON.parse(storageRegisterCache)
-    // console.log("storageRegisterCache",storageRegisterCache);
   }
   watchEffect(() => {
-    // user.email.value
-    // console.log("user.value:", typeof(user.value),user.value);
-    localStorage.setItem('RegisterCache', JSON.stringify(user.value))
-    // localStorage.setItem(('RegisterCache', user.value.password = '', user.value.repeatPassword = '')
-    // localStorage.removeItem('RegisterCache', )
-    // window.localStorage.setItem('RegisterCache', user.value)
+    const userWithoutPwd = Object.fromEntries(
+      Object.entries(user.value).filter(([key, value]) => key !== "password" && key !== "repeatPassword")
+    )
+    localStorage.setItem('RegisterCache', JSON.stringify(userWithoutPwd))
   })
-  // getUser.$patch({user: { name: user.value.name, age: user.value.age, email: user.value.email }})
-  // getUser.$subscribe(() => {
-  //     getUser.$patch({ user: { name: user.value.name, age: user.value.age, email: user.value.email }})
-  //     localStorage.setItem("RegisterForm", JSON.stringify(user))
-  //   },{
-  //     detached: true
-  //   })
-
-  // watch(
-  //   (getUser) => {
-  //     console.log("watching ", getUser);
-      
-  //   },
-  //   { deep: true }
-  // )
-  // watchEffect((user.value) => {
-
-  //   console.log("user", user.value)
-  // })
-  // console.log("getUser", getUser.user)
   console.log("user", user.value)
 
-
-  // if (localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-  //   document.querySelector('html').classList.add('dark');
-  //   localStorage.setItem('dark-mode', true)
-  //   darkMode.$patch({ darkMode: true })
-  //   console.log("DARK MODE was added")
-  //   console.log("See Store value:", darkMode.getDarkMode)
-  // } else {
-  //   document.querySelector('html').classList.remove('dark');
-  //   localStorage.setItem('dark-mode', false)
-  //   /* darkMode.$patch({ darkMode: false }) */
-  //   console.log("DARK MODE was removed")
-  //   console.log("See Store value:", darkMode.getDarkMode)
-  // }
   const rules = {
     name: { required, alpha, minLength: minLength(3) },
     age: { required, between: between(20, 30) },
@@ -79,17 +48,20 @@
     repeatPassword: { sameAsPassword: sameAs(computed(() => user.value.password))}
   }
   const v$ = useVuelidate(rules, user)
-  const handleClick = () => {
-    handleSubmit()
-  }
+
   const handleSubmit = async () => {
     let data = JSON.stringify(user.value)
+    console.log("handleSubmit data", data)
 
-    await UserService
-      .create(data)
+    // await UserService
+    await AuthService
+      .signin_post(data)
       .then((res) => {
         const data = res.data
-        console.log("res.data", data )
+        let user = { user: data.name, email: data.email, role: 'dev'}
+        console.log("res.data", res.data )
+        console.log("user", user )
+        registerUser(user)
         router.push({name: "home"})
       })
       .catch((err) => {
@@ -108,7 +80,7 @@
   <div class="wrapper">
   
     <v-container>
-      <v-form @submit.prevent="handleClick">
+      <v-form @submit.prevent="handleSubmit">
         <div class="text-h5">Register</div>
         <v-responsive>
           <v-text-field
@@ -177,7 +149,7 @@
         <v-divider></v-divider>
         <div v class="d-flex justify-center m-2">
           <v-card-actions>
-            <v-btn @click="handleClick" color="success" size="small" class="d-flex justify-center">
+            <v-btn type="submit" color="success" size="small" class="d-flex justify-center">
               Complete Registration
             </v-btn>
             <div v-if="v$.repeatPassword.$error">error: {{v$.repeatPassword.$error }}</div>

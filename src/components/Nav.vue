@@ -1,12 +1,28 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import { useNavStore } from '../stores/nav.store'
+import { useAuthStore } from '@/stores/auth.store'
 import { useDark, useToggle } from '@vueuse/core'
+import { onUpdated } from 'vue'
 
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
+// const authStore = useAuthStore()
+// const updateUser = authStore
+// authStore.$patch({
+//   storeUser: '',
+//   storeEmail: ''
+// })
 
+const getUserstate = useAuthStore()
 const darkMode = useNavStore()
+
+console.log("authStore:" ,getUserstate.$state);
+// onUpdated(() => {
+//   getUserstate.$state
+//   // text content should be the same as current `count.value`
+//   // console.log("getUserstate",getUserstate)
+// })
 
 /* console.log("get store value: darkMode", darkMode) */
 console.log("get store value: darkMode.getDarkMode", darkMode.getDarkMode)
@@ -21,6 +37,11 @@ console.log("get store value: darkMode.getDarkMode", darkMode.getDarkMode)
           <RouterLink to="/register">Register</RouterLink>
           <RouterLink to="/login">Login</RouterLink>
           <RouterLink to="/logout">Logout</RouterLink>
+
+        </div>
+        <div>
+          <!-- <span v-if="getUserstate">---- {{ getUserstate.$state.storeUserName }} ---</span> -->
+          <span class=" flex flex-col justify-end font-italic text-pink-darken-3">{{ getUserstate.$state.storeUserEmail  }}</span>
         </div>
         <!-- <v-checkbox label="Checkbox"></v-checkbox> -->
         <div @click="darkMode.toggleDarkMode" class="flex flex-col justify-center">

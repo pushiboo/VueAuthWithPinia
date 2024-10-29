@@ -2,14 +2,20 @@
 const db = require("../models/index.cjs")
 const Users = db.users
 const jwt = require('jsonwebtoken'); 
+const jose = require('jose')
 const fs = require('fs');
 const path = require('path');
+// const { data } = require("autoprefixer");
 const maxAge = 3 * 60 * 60;
 const privateKeyPath = path.join(__dirname, '..' , 'config/', 'private.key')
 const privateKey = fs.readFileSync( privateKeyPath, { encoding: 'utf8', flag: 'r' });
 const cookieName = 'andreasplichta'
+const mySecret = process.env.JWT_SECRET
+const secret = new TextEncoder().encode(mySecret)
+// const data = {}
+const alg = 'HS256'
 
-
+// data.push({site: 'andreasplichta.de'})
 // handle errors
 const handleErrors = (err) => {
   console.log(err.message, err.code);
@@ -60,14 +66,26 @@ const handleErrors = (err) => {
 }
 
 // create json web token
-const createToken = (id) => {
+const createToken = async (data) => {
   // jwt.sign({user id / Payload}, 'the secret we are adding to the token', { additional condition like here a expire date})
-  const token = jwt.sign({ id: id }, privateKey )
+  // const token = jwt.sign({ id: id }, privateKey )
+  // const token = jwt.sign({ id: id }, privateKey )
+  // console.log("JWT_SECRET", secret);
+  
+  const token = await new jose.SignJWT(data)
+  .setProtectedHeader({ alg })
+  .setIssuedAt()
+  .setIssuer(`urn:${data.site}:${data.email}`)
+  .setExpirationTime('2h')
+  .sign(secret)
+  console.log("token:", token);
+  
 
   return token
 }
 
 // callback functions
+// Check if user
 module.exports.login_get = (req, res, next) => {
   if(!req.rawHeaders.includes("Cookie")) {
     console.log("auth.controller.login_get() | INFO: No cookies in rawHeaders!")
@@ -115,13 +133,17 @@ module.exports.login_post = async (req, res) => {
     res.end()
   }
   
-  const { username, password } = req.body;
+  const { email, password } = req.body  
   try {
-    const user = await Users.login(username, password)
-    const token = createToken(user._id)
-
-    res.cookie('andreasplichta', token, { httpOnly: true, secure: true, maxAge: maxAge * 1000 })
-    res.status(200).json({ user: user._id, username: user.username, role: user.role, token })
+    const user = await Users.login(email, password)
+    console.log("Await User ID:", user._id)
+    console.log("Await User EMAIL:", user.email)
+    
+    const token = createToken({email: user.email})
+    res.cookie('andreasplichta', token, { httpOnly: true, maxAge: maxAge * 1000 })
+    // Https settings
+    // res.cookie('andreasplichta', token, { httpOnly: true, secure: true, maxAge: maxAge * 1000 })
+    res.status(200).json({ id: user._id,  user: user.name, email: user.email, role: user.role, "api-token": token })
     res.end()
     console.log("auth.controller.login_post() | SUCCESS: User login successfull")
   } catch (err) {
@@ -139,33 +161,27 @@ module.exports.login_post = async (req, res) => {
   }
 }
 module.exports.signin_post = async (req, res) => {
-  
-  const token = createToken(req.body.email)
+  console.log("request::", req.body.email)
+  // const token = createToken(req.body.email)
+  // console.log("token::", token)
   
   const user = new Users({
-    username: req.body.username,
-    forename: req.body.forename,
-    surname: req.body.surname,
+    name: req.body.name,
     email: req.body.email,
     password: req.body.password,
-    active: req.body.active,
-    "ad-account": req.body['ad-account'],
-    role: req.body.role,
-    "function-role": req.body['function-role'],
-    "api-token": token,
-    additional: req.body.additional,
-    created: req.body.created,
-    lastActiveAt: req.body.lastActiveAt
+    role: 'Dev',
+    "api-token": ''
   })
 
   user
     .save(user)
     .then(data => {
       /* Create a secure version of the token */
-      const token = createToken(data._id)
-
-      res.cookie('andreasplichta', token, { httpOnly: true, maxAge: maxAge * 1000 }) 
-      res.status(200).json({ user: user._id, username: user.username, role: user.role, token })
+      const token = createToken({email: user.email})
+      user["api-token"] = token
+      // res.cookie()
+      res.cookie(cookieName, token, { httpOnly: true, maxAge: maxAge * 1000 })
+      res.status(200).json({ name: user.name, email: user.email, role: user.role, "api-token": token })
       console.log("auth.controller.signin_post() | SUCCESS: User signed in successfully: data",data)
       res.end()
     })

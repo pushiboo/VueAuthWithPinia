@@ -1,7 +1,38 @@
 <script setup>
   import { useRouter } from 'vue-router'
+  import AuthServices from '@/services/auth.service'
+  import { ref } from 'vue';
 
   const router = useRouter()
+  const AuthService = new AuthServices()
+  const logoutMessage = ref({
+    message: {
+      good: '',
+      error: ''
+    }
+  })
+
+  const logout = async () => {
+    await AuthService
+      .logout_delete()
+      .then(res => {
+        console.log("res.data.message",res);
+        
+        logoutMessage.value.message.good = res.data.message
+        setTimeout(() => {
+          router.push({name: 'login'})
+        }, 3000)
+        console.log(res.data.message);
+      })
+      .catch(err =>  {
+        console.log("Logout err", err);
+        logoutMessage.value.message.error = res.data.message
+        setTimeout(() => {
+          router.push({name: 'login'})
+        }, 3000)
+      })
+  }
+
 
 </script>
 
@@ -9,6 +40,8 @@
   <div class="wrapper">
     <v-container>
       <div class="text-h5">Logout </div>
+      <div v-if="logoutMessage.message.good">{{logoutMessage.message.good}}</div>
+      <div v-else >{{logoutMessage.message.error}}</div>
 
     </v-container>
 
@@ -16,7 +49,8 @@
     <div class="d-flex justify-center m-2">
       <v-card-actions>
 
-      <v-btn @click="router.push({ name: 'login'})" color="error" size="small" class="d-flex justify-center">
+      <!-- <v-btn @click="router.push({ name: 'login'})" color="error" size="small" class="d-flex justify-center"> -->
+      <v-btn @click="logout" color="error" size="small" class="d-flex justify-center">
         Logout
       </v-btn>
       </v-card-actions>

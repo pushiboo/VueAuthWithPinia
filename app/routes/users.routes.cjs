@@ -10,9 +10,9 @@ module.exports = app => {
   // Retrieve all published Users 
   router.get("/published", users.findAllPublished)
   //Retrieve a single User with id
-  router.get("/:email", users.findEmail)
+  router.get("/:mail", users.findEmail)
   //Retrieve a single User with id
-  router.get("/:id", users.findOne)
+  // router.get("/:id", users.findOne)
   // Update a User with id
   router.put("/:id", users.update)
   // Delete a User with id

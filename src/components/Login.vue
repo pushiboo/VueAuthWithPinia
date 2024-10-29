@@ -1,19 +1,24 @@
 <script setup>
   import { ref } from 'vue'
   import { RouterLink } from 'vue-router'
+  import { useRouter } from 'vue-router'
   import { useVuelidate } from '@vuelidate/core'
   import { email, minLength, required } from '@vuelidate/validators'
   // import UserServices from '@/services/users.service'
   import AuthServices from '@/services/auth.service'
   import { watchEffect } from 'vue'
+  import { useAuthStore } from '@/stores/auth.store'
 
   // const UserService = new UserServices()
+  const router = new useRouter()
+  const authStore = useAuthStore()
+  const { updateUser } = authStore
   const user = ref({
     email: '',
     password: '',
     show: false
   })
-
+  let error = ref('')
   const AuthService = new AuthServices()
 
   const storageLoginCache = localStorage.getItem('LoginCache')
@@ -27,7 +32,6 @@
     localStorage.setItem('LoginCache', user.value.email)
 
   })
-
   
   const rules = ref({
     email: { required, email },
@@ -48,7 +52,7 @@
       password: user.value.password
     }
 
-    console.log("handleClick, user", user.value)
+    console.log("handleClick, data", data)
    /*  const getUser = await UserService.findByEmail(user.value.email)
     console.log("getUser:", getUser.value) */
     /* const authLogin = await  */
@@ -56,15 +60,33 @@
       .login_post(data)
       .then(res =>{
         const data = res.data
-        console.log("then data", data)
+        let user = { user: data.user, email: data.email, role: data.role}
+        console.log("LOGIN res.data", res.data )
+        console.log("LOGIN user", user )
+        user.role = 'd e v'
+        updateUser(user)
+        // localStorage.setItem()
+        // storeUser = data.user
+        // storeEmail = data.email
+        // updateUser.user = res.data.user
+        // updateUser(data.email)
+
+        // updateUser.role = res.data.role
+        // console.log("then data", data.user, data.email, data.role)
+        router.push({name: "home"})
       })
       .catch(err => {
+        error.value = err.message
         console.log('LoginView.vue | ERROR: ', err.message)
       })
     /* console.log("getUser:", getUser) */
     /* console.log("authLogin:", authLogin) */
   }
 
+  function onEnter () {
+    console.log("enter hit successfull");
+    
+  }
 
   // const handleSubmit = async () => {
   //   let data = {
@@ -112,7 +134,8 @@
     <v-container>
       <div class="text-h5">Login</div>
       <!-- <v-form @submit.prevent="handleSubmit"> -->
-      <v-form >
+      <v-form @submit.prevent="onEnter()" >
+      <!-- <v-form  > -->
         <v-text-field
             v-model="user.email"
             @input="v$.email.$touch"
@@ -137,6 +160,21 @@
             variant="underlined"
             @click:append="user.show = !user.show"
         ></v-text-field>
+
+          <v-card-actions class="d-flex justify-center item  ">
+
+              <!-- <v-btn @click="handleClick" color="success" size="small">Login</v-btn> -->
+              <v-btn type="submit" @click="handleClick" color="success" size="small">Login</v-btn>
+
+              <span class="text-red" v-if="error">{{ error }}</span>
+            <!-- <v-btn @click="handleSubmit" color="success" size="small" class="d-flex justify-center">Login</v-btn> -->
+          </v-card-actions>
+          <v-alert class="justify-center"
+                v-if="error"
+                color="error"
+               >
+                {{ error }}
+          </v-alert>
       </v-form>
       <!-- 
           @change="setEmail(user.email)"  
@@ -145,11 +183,7 @@
     </v-container>
 
     <v-divider></v-divider>
-    <div class="d-flex justify-center m-2">
-      <v-card-actions>
-        <v-btn @click="handleClick" color="success" size="small" class="d-flex justify-center">Login</v-btn>
-        <!-- <v-btn @click="handleSubmit" color="success" size="small" class="d-flex justify-center">Login</v-btn> -->
-      </v-card-actions>
+    <div class="d-flex justify-center m-2"> 
     </div>
     <div class="flex justify-center gap-2 text-indigo-500 mb-4">
       <p class="text-sm">Please register here:</p>
