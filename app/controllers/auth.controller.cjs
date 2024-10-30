@@ -80,7 +80,6 @@ const createToken = async (data) => {
   .sign(secret)
   console.log("token:", token);
   
-
   return token
 }
 
@@ -93,30 +92,33 @@ module.exports.login_get = (req, res, next) => {
     res.end()
   }
   try {
-    let acctualCookieName = 'andreasplichta'
-    let userCookie = null
-    
+    // let acctualCookieName = 'andreasplichta'
+    let userCookie = ''
     req.rawHeaders.map(cookie => {
-      
-      if( cookie.includes("andreasplichta") ) {
+      if(cookie.includes(cookieName) ) {
         userCookie = cookie.split(";")
-          .filter(ent => ent.includes(acctualCookieName))
+          .filter(ent => ent.includes(cookieName))
           .toString()
-          .replace(acctualCookieName + "=", "")
+          .replace(cookieName + "=", "")
           .trim()
+
+        console.log("GET userCookie: ", userCookie);
+         jose.decodeJwt(userCookie)
+        console.log("claims: ", clains);
         
-        jwt.verify(userCookie, privateKey, (err, decodedToken) => {
-          if(err) {
-            console.log("auth.controller.login_get() | ERROR: occured during verification of the jwt token:", err.message)
-            return next()
-          } else {
-            console.log("auth.controller.login_get() | SUCCESS: Cookie transmitted")
-            console.log("auth.controller.login_get() | SUCCESS:  userCookie, user: decodedToken.id, timestamp: decodedToken.iat", userCookie, decodedToken.id, decodedToken.iat)
-            res.status(200).json({ userCookie, user: decodedToken.id, timestamp: decodedToken.iat })
-            res.end()
-          }
-        })
-      }
+          // .setIssuer(`urn:${data.site}:${data.email}`)
+        // jwt.verify(userCookie, privateKey, (err, decodedToken) => {
+        //   if(err) {
+        //     console.log("auth.controller.login_get() | ERROR: occured during verification of the jwt token:", err.message)
+        //     return next()
+        //   } else {
+        //     console.log("auth.controller.login_get() | SUCCESS: Cookie transmitted")
+        //     console.log("auth.controller.login_get() | SUCCESS:  userCookie, user: decodedToken.id, timestamp: decodedToken.iat", userCookie, decodedToken.id, decodedToken.iat)
+        //     res.status(200).json({ userCookie, user: decodedToken.id, timestamp: decodedToken.iat })
+        //     res.end()
+        //   }
+        // })
+      } 
       /* return res.end() */
     })
   }
@@ -139,7 +141,9 @@ module.exports.login_post = async (req, res) => {
     console.log("Await User ID:", user._id)
     console.log("Await User EMAIL:", user.email)
     
-    const token = createToken({email: user.email})
+    
+    const token = await createToken({email: user.email})
+    console.log("Created token:", token)
     res.cookie('andreasplichta', token, { httpOnly: true, maxAge: maxAge * 1000 })
     // Https settings
     // res.cookie('andreasplichta', token, { httpOnly: true, secure: true, maxAge: maxAge * 1000 })
@@ -193,8 +197,8 @@ module.exports.signin_post = async (req, res) => {
 }
 module.exports.logout_delete = (req, res) => {
   if(!req.rawHeaders.includes("Cookie")) {
-    /* console.log("auth.controller.logout_delete() | INFO: No cookies in rawHeaders!") */
-
+     console.log("auth.controller.logout_delete() | INFO: No cookies in rawHeaders!") 
+    //  console.log("auth.controller.logout_delete() | INFO: res", res.rawHeaders) 
     return res.end()
   }
   try {
@@ -204,11 +208,15 @@ module.exports.logout_delete = (req, res) => {
           .filter(ent => ent.includes(cookieName))
           .toString()
           .trim()
-      
-        res.clearCookie(userCookie)
+
+        // console.log("userCookie", cookieName);
+
+        res.clearCookie(cookieName)
+        res.send('cookie cleared')
         res.end()
         console.log("auth.controller.logout_delete() | SUCCESS: User logout successfully")
       }
+      // console.log("delete cookie", cookie);
     })
   } catch (err) {
     console.log("auth.controller.logout_delete() | ERROR: Put into handleErrors")

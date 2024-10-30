@@ -12,7 +12,7 @@ class AuthServices {
     return http.post('/auth/signin ', data , { withCredentials: true })
   }
   logout_delete() {
-    return http.delete('/auth/logout', { withCredentials: true } )
+    return http.get('/auth/logout', { withCredentials: true })
   }
 }
 

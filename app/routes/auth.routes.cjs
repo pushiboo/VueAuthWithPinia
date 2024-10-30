@@ -11,7 +11,7 @@ module.exports = app => {
   // Signin User 
   router.post('/signin', auth.signin_post);
   // Logout User and delete cookies
-  router.delete('/logout', auth.logout_delete);
+  router.get('/logout', auth.logout_delete);
 
   // app use router
   app.use('/api/auth', router)

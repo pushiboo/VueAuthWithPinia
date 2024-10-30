@@ -17,19 +17,24 @@
       .logout_delete()
       .then(res => {
         console.log("res.data.message",res);
-        
-        logoutMessage.value.message.good = res.data.message
-        setTimeout(() => {
-          router.push({name: 'login'})
-        }, 3000)
-        console.log(res.data.message);
+        // logoutMessage.value.message.good = res.data.message
+        // setTimeout(() => {
+        //   router.push({name: 'login'})
+        // }, 3000)
+        // console.log(res.data.message);
       })
       .catch(err =>  {
-        console.log("Logout err", err);
-        logoutMessage.value.message.error = res.data.message
-        setTimeout(() => {
-          router.push({name: 'login'})
-        }, 3000)
+        console.log("Logout err", err.message);
+      })
+  }
+  const get = async () => {
+    await AuthService
+      .login_get()
+      .then(res => {
+        console.log("GET: res.data.message",res);
+      })
+      .catch(err =>  {
+        console.log("GET err", err.message);
       })
   }
 
@@ -52,6 +57,9 @@
       <!-- <v-btn @click="router.push({ name: 'login'})" color="error" size="small" class="d-flex justify-center"> -->
       <v-btn @click="logout" color="error" size="small" class="d-flex justify-center">
         Logout
+      </v-btn>
+      <v-btn @click="get" color="warning" size="small" class="d-flex justify-center">
+        Get
       </v-btn>
       </v-card-actions>
     </div>
