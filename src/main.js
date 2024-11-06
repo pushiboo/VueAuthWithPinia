@@ -4,6 +4,7 @@ import './index.css'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { useNavStore } from './stores/nav.store'
+import { useAuthStore } from './stores/auth.store'
 import { registerPlugins } from '@/plugins'
 
 
@@ -17,6 +18,10 @@ app.use(router)
 registerPlugins(app)
 
 const darkMode = useNavStore()
+const storedUser = useAuthStore()
+
+console.log("storedUser:",storedUser.storeUserEmail);
+
 
 // validate user setting and check default setting and 
 if (localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {

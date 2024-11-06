@@ -6,7 +6,7 @@
   import { email, alpha, required, minLength, between, sameAs } from '@vuelidate/validators'
   import UserServices from '@/services/users.service'
   import AuthServices from '@/services/auth.service'
-  import { useAuthStore } from '@/stores/auth.store'
+  import { useAuthStore } from '@/stores/auth.store.js'
   // import {useFormStore} from '@/stores/form.store'
   import { watchEffect } from 'vue'
 

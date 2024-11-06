@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import { useNavStore } from '../stores/nav.store'
-import { useAuthStore } from '@/stores/auth.store'
+import { useAuthStore } from '@/stores/auth.store.js'
 import { useDark, useToggle } from '@vueuse/core'
 import { onUpdated } from 'vue'
 

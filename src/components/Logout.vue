@@ -31,7 +31,7 @@
     await AuthService
       .login_get()
       .then(res => {
-        console.log("GET: res.data.message",res);
+        console.log("GET: res.data.message",res.data.decodetToken);
       })
       .catch(err =>  {
         console.log("GET err", err.message);

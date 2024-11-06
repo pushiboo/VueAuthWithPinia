@@ -49,7 +49,7 @@ module.exports = mongoose => {
     const user = await this.findOne({email})
     // console.log("users.model.js UserSchema.login | SUCCESS: User data matched successfully")
     if (user) {
-      console.log("users.model.js UserSchema.login | user:", user)
+      // console.log("users.model.js UserSchema.login | user:", user)
       const auth = await bcrypt.compare( password, user.password)
       console.log("users.model.js UserSchema.login | SUCCESS: User data matched successfully")
       if (auth) {

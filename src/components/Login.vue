@@ -7,7 +7,7 @@
   // import UserServices from '@/services/users.service'
   import AuthServices from '@/services/auth.service'
   import { watchEffect } from 'vue'
-  import { useAuthStore } from '@/stores/auth.store'
+  import { useAuthStore } from '@/stores/auth.store.js'
 
   // const UserService = new UserServices()
   const router = new useRouter()
